@@ -1,0 +1,105 @@
+
+/* ===== GLOBAL ===== */
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ===== AUTH CONTAINER ===== */
+.auth-container {
+  height: 100vh;
+  background: linear-gradient(to right, #ebf4f6, #dff1f5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ===== FORM ===== */
+.auth-form {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  width: 340px; /* 👈 أكبر شوي */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ===== TITLE ===== */
+.auth-title {
+  text-align: center;
+  color: #09637e;
+  margin-bottom: 10px;
+}
+
+/* ===== INPUTS ===== */
+
+.auth-input {
+  width: 100%;
+  box-sizing: border-box; /* 👈 أهم سطر */
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+
+.auth-input:focus {
+  outline: none;
+  border-color: #088395;
+}
+
+/* ===== BUTTON ===== */
+.auth-button {
+  padding: 10px;
+  width: 60%; /* 👈 بدل 50% */
+  align-self: center;
+  background: #088395;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.auth-button:hover {
+  background: #066b78;
+}
+
+/* ===== ERRORS ===== */
+.auth-error {
+  color: red;
+  font-size: 12px;
+  margin: -8px 0 0 0;
+}
+
+/* ===== TOAST DESIGN ===== */
+.Toastify__toast {
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px;
+}
+
+/* success */
+.Toastify__toast--success {
+  background: #088395;
+  color: white;
+}
+
+/* error */
+.Toastify__toast--error {
+  background: #e74c3c;
+  color: white;
+}
+
+/* warning */
+.Toastify__toast--warning {
+  background: #f39c12;
+  color: white;
+}
+
+/* progress bar */
+.Toastify__progress-bar {
+  background: rgba(255, 255, 255, 0.7);
+}

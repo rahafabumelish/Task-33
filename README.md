@@ -70,32 +70,29 @@ proj33/
 │
 │   ├── src/
 │   │
+│   │   ├── api/
+│   │   │   └── api.js        ← 🔥 Axios helper (new)
+│   │   │
 │   │   ├── components/
 │   │   │
 │   │   │   ├── Navbar.jsx
-│   │   │
+│   │   │   ├── Footer.jsx
 │   │   │   ├── Home.jsx
 │   │   │   ├── CourseCard.jsx
 │   │   │   ├── CourseDetail.jsx
-│   │   │
 │   │   │   ├── Register.jsx
 │   │   │   ├── Login.jsx
-│   │   │
 │   │   │   ├── Enrollments.jsx   
 │   │   │   ├── Cart.jsx    
-│   │   │
 │   │   │   ├── AdminDashboard.jsx
 │   │   │   ├── CreateCourse.jsx
 │   │   │   ├── EditCourse.jsx
-│   │   │
 │   │   │   ├── ProtectedRoute.jsx
 │   │
 │   │   ├── context/
 │   │   │   └── AuthContext.jsx
-│   │
 │   │   ├── App.jsx
 │   │   └── main.jsx
-│
 │   ├── .env
 │   ├── index.html
 │   └── package.json

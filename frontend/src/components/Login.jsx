@@ -1,31 +1,109 @@
 import { useState } from "react";
+import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import "../App.css";
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+function Login() {
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
 
-  const login = async () => {
-    const res = await fetch("http://localhost:5000/users/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
-    const data = await res.json();
+  const validate = () => {
+    let newErrors = {};
 
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    alert("Logged in");
+    if (!form.email) {
+      newErrors.email = "Email is required";
+    } else if (!emailRegex.test(form.email)) {
+      newErrors.email = "Invalid email format";
+    }
+
+    if (!form.password) {
+      newErrors.password = "Password is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleChange = (field, value) => {
+    setForm({ ...form, [field]: value });
+    setErrors({ ...errors, [field]: "" });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validate()) return;
+
+    try {
+      const res = await axios.post("http://localhost:5000/users/login", form);
+
+      localStorage.setItem("token", res.data.token);
+
+      toast.success("Login successful");
+
+      setTimeout(() => {
+        navigate("/");
+      }, 800);
+    } catch (err) {
+      toast.error("Invalid email or password");
+    }
   };
 
   return (
-    <div>
-      <input placeholder="email" onChange={(e) => setEmail(e.target.value)} />
-      <input placeholder="password" onChange={(e) => setPassword(e.target.value)} />
-      <button onClick={login}>Login</button>
+    <div className="auth-container">
+      {/* LEFT */}
+      <div className="auth-left">
+        <h1>Welcome Back 👋</h1>
+
+        <p>
+          Continue your journey, learn new skills and grow your career with us.
+        </p>
+
+        <div className="features">
+          <p>🚀 Learn at your own pace</p>
+          <p>📚 Access hundreds of courses</p>
+        </div>
+      </div>
+
+      {/* RIGHT */}
+      <div className="auth-right">
+        <form onSubmit={handleSubmit} className="auth-form">
+          <h2 className="auth-title">Login</h2>
+
+          <input
+            className="auth-input"
+            placeholder="Email"
+            value={form.email}
+            onChange={(e) => handleChange("email", e.target.value)}
+          />
+          {errors.email && <p className="auth-error">{errors.email}</p>}
+
+          <input
+            type="password"
+            className="auth-input"
+            placeholder="Password"
+            value={form.password}
+            onChange={(e) => handleChange("password", e.target.value)}
+          />
+          {errors.password && <p className="auth-error">{errors.password}</p>}
+
+          <button className="auth-button">Login</button>
+
+          <p className="auth-switch">
+            Don’t have an account? <Link to="/register">Register</Link>
+          </p>
+        </form>
+      </div>
     </div>
   );
-};
+}
 
 export default Login;

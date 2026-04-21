@@ -1,24 +1,17 @@
-const Cart = () => {
-  const checkout = async () => {
-    const res = await fetch("http://localhost:5000/payments/checkout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify({ courseId: "PUT_ID_HERE" }),
-    });
+import api from "../api/api";
 
-    const data = await res.json();
-    window.location.href = data.url;
+function Cart() {
+  const checkout = async () => {
+    const res = await api.post("/payments/checkout");
+    window.location.href = res.data.url;
   };
 
   return (
-    <div>
-      <h1>Checkout</h1>
-      <button onClick={checkout}>Pay with Stripe</button>
+    <div className="section">
+      <h2>Cart</h2>
+      <button onClick={checkout}>Pay Now</button>
     </div>
   );
-};
+}
 
 export default Cart;

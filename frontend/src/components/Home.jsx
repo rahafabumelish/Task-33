@@ -1,28 +1,65 @@
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+import CourseCard from "./CourseCard";
+import api from "../api/api";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-const Home = () => {
+function Home() {
   const [courses, setCourses] = useState([]);
+  const location = useLocation();
+
+const search =
+  new URLSearchParams(location.search).get("search") || "";
 
   useEffect(() => {
-    fetch("http://localhost:5000/courses")
-      .then((res) => res.json())
-      .then((data) => setCourses(data.courses));
+    api.get("/courses").then((res) => {
+      setCourses(res.data.courses);
+    });
   }, []);
 
-  return (
-    <div>
-      <h1>Courses</h1>
+  // 🔥 فلترة حسب الاسم
+  const filteredCourses = courses.filter((c) =>
+    c.title.toLowerCase().includes(search.toLowerCase())
+  );
 
-      {courses.map((c) => (
-        <div key={c._id}>
-          <h3>{c.title}</h3>
-          <p>{c.price}$</p>
-          <Link to={`/course/${c._id}`}>View</Link>
+  return (
+    <div className="page">
+
+      <Navbar />
+
+      <div className="page-content">
+
+        <div className="hero">
+          <h1>Learn Skills That Matter 🚀</h1>
+
+          {search && (
+            <p>
+              Search results for: <b>{search}</b>
+            </p>
+          )}
         </div>
-      ))}
+
+        <div className="section">
+          <h2>Popular Courses</h2>
+
+          <div className="courses">
+            {filteredCourses.length > 0 ? (
+              filteredCourses.map((c) => (
+                <CourseCard key={c._id} course={c} />
+              ))
+            ) : (
+              <p>No courses found 😢</p>
+            )}
+          </div>
+
+        </div>
+
+      </div>
+
+      <Footer />
     </div>
   );
-};
+}
 
 export default Home;

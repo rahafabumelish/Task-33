@@ -1,29 +1,26 @@
 import { useEffect, useState } from "react";
+import api from "../api/api";
 
-const Enrollments = () => {
-  const [data, setData] = useState([]);
+function Enrollments() {
+  const [enrollments, setEnrollments] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/enrollments/my", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setData(data));
+    api.get("/enrollments/my").then((res) => {
+      setEnrollments(res.data.enrollments);
+    });
   }, []);
 
   return (
-    <div>
-      <h1>My Courses</h1>
+    <div className="section">
+      <h2>My Courses</h2>
 
-      {data.map((e) => (
+      {enrollments.map((e) => (
         <div key={e._id}>
           <h3>{e.course.title}</h3>
         </div>
       ))}
     </div>
   );
-};
+}
 
 export default Enrollments;

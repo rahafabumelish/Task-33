@@ -1,31 +1,29 @@
 import { useState } from "react";
+import api from "../api/api";
+import { useNavigate } from "react-router-dom";
 
-const CreateCourse = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+function CreateCourse() {
+  const [form, setForm] = useState({});
+  const navigate = useNavigate();
 
   const create = async () => {
-    await fetch("http://localhost:5000/courses", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify({ title, description, price }),
-    });
-
-    alert("Created");
+    await api.post("/courses", form);
+    navigate("/admin");
   };
 
   return (
-    <div>
-      <input onChange={(e) => setTitle(e.target.value)} placeholder="title" />
-      <input onChange={(e) => setDescription(e.target.value)} placeholder="desc" />
-      <input onChange={(e) => setPrice(e.target.value)} placeholder="price" />
+    <div className="section">
+      <h2>Create Course</h2>
+
+      <input placeholder="Title" onChange={(e) =>
+        setForm({ ...form, title: e.target.value })} />
+
+      <textarea placeholder="Description" onChange={(e) =>
+        setForm({ ...form, description: e.target.value })} />
+
       <button onClick={create}>Create</button>
     </div>
   );
-};
+}
 
 export default CreateCourse;

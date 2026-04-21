@@ -1,14 +1,18 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const CourseCard = ({ course }) => {
+function CourseCard({ course }) {
+  const navigate = useNavigate();
+
   return (
-    <div style={{ border: "1px solid #ddd", padding: "10px", width: "200px" }}>
+    <div className="course-card">
       <h3>{course.title}</h3>
-      <p>{course.price}$</p>
+      <p>{course.description?.slice(0, 80)}...</p>
 
-      <Link to={`/course/${course._id}`}>View</Link>
+      <button onClick={() => navigate(`/course/${course._id}`)}>
+        View Course
+      </button>
     </div>
   );
-};
+}
 
 export default CourseCard;

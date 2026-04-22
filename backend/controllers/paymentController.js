@@ -66,7 +66,7 @@ const checkoutCourse = async (req, res) => {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.BASE_URL}/payments/success?paymentId=${payment._id}`,
+      success_url: `${process.env.FRONTEND_URL}/payment-success`,
       cancel_url: `${process.env.BASE_URL}/payments/cancel`,
     });
 

@@ -9,32 +9,29 @@ function EditCourse() {
   const [form, setForm] = useState({
     title: "",
     description: "",
-    price: 0,
+    price: "",
   });
 
   const [imageType, setImageType] = useState("url");
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
-
   const [loading, setLoading] = useState(true);
 
-  // 🔥 جلب البيانات
   useEffect(() => {
     const fetchCourse = async () => {
       try {
         const res = await api.get(`/courses/${id}`);
 
         setForm({
-          title: res.data.title,
-          description: res.data.description,
-          price: res.data.price,
+          title: res.data.title || "",
+          description: res.data.description || "",
+          price: res.data.price || "",
         });
 
         setImageUrl(res.data.image || "");
-
-        setLoading(false);
       } catch (err) {
         console.log(err);
+      } finally {
         setLoading(false);
       }
     };
@@ -42,7 +39,12 @@ function EditCourse() {
     fetchCourse();
   }, [id]);
 
-  // 🔥 تحديث
+  const handleTypeChange = (type) => {
+    setImageType(type);
+    setImageFile(null);
+    setImageUrl("");
+  };
+
   const update = async () => {
     try {
       const data = new FormData();
@@ -70,95 +72,67 @@ function EditCourse() {
   if (loading) return <h2>Loading...</h2>;
 
   return (
-    <div className="edit-container">
+    <div className="section">
+      <h2>Edit Course</h2>
 
-      <h2 className="edit-title">Edit Course </h2>
+      <input
+        className="auth-input"
+        placeholder="Title"
+        value={form.title}
+        onChange={(e) => setForm({ ...form, title: e.target.value })}
+      />
 
-      {/* ================= FORM ================= */}
-      <div className="edit-form">
+      <textarea
+        className="auth-input"
+        placeholder="Description"
+        value={form.description}
+        onChange={(e) => setForm({ ...form, description: e.target.value })}
+      />
 
-        <input
-          className="auth-input"
-          placeholder="Title"
-          value={form.title}
-          onChange={(e) =>
-            setForm({ ...form, title: e.target.value })
-          }
-        />
+      <input
+        className="auth-input"
+        type="number"
+        placeholder="Price"
+        value={form.price}
+        onChange={(e) => setForm({ ...form, price: e.target.value })}
+      />
 
-        <textarea
-          className="auth-input"
-          placeholder="Description"
-          value={form.description}
-          onChange={(e) =>
-            setForm({ ...form, description: e.target.value })
-          }
-        />
-
-        <input
-          className="auth-input"
-          type="number"
-          placeholder="Price"
-          value={form.price}
-          onChange={(e) =>
-            setForm({ ...form, price: e.target.value })
-          }
-        />
-
-        {/* ================= TABS ================= */}
-        <div className="tabs">
-          <button
-            className={imageType === "url" ? "active-tab" : ""}
-            onClick={() => setImageType("url")}
-          >
-            URL
-          </button>
-
-          <button
-            className={imageType === "upload" ? "active-tab" : ""}
-            onClick={() => setImageType("upload")}
-          >
-            Upload
-          </button>
-        </div>
-
-        {/* ================= INPUT ================= */}
-        {imageType === "url" ? (
-          <input
-            className="auth-input"
-            placeholder="Image URL"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-          />
-        ) : (
-          <input
-            type="file"
-            onChange={(e) => setImageFile(e.target.files[0])}
-          />
-        )}
-
-        {/* ================= PREVIEW ================= */}
-        <div className="preview">
-          <p>Preview:</p>
-
-          <img
-            src={
-              imageType === "upload" && imageFile
-                ? URL.createObjectURL(imageFile)
-                : imageUrl?.startsWith("http")
-                ? imageUrl
-                : `${import.meta.env.VITE_API_URL}${imageUrl}`
-            }
-            alt="preview"
-          />
-        </div>
-
-        {/* ================= BUTTON ================= */}
-        <button className="auth-button" onClick={update}>
-          Save Changes
+      {/* toggle */}
+      <div className="image-toggle">
+        <button
+          className={imageType === "url" ? "active" : ""}
+          onClick={() => handleTypeChange("url")}
+        >
+          URL
         </button>
 
+        <button
+          className={imageType === "upload" ? "active" : ""}
+          onClick={() => handleTypeChange("upload")}
+        >
+          Upload
+        </button>
       </div>
+
+      {/* input */}
+      {imageType === "url" ? (
+        <input
+          className="auth-input"
+          placeholder="Image URL"
+          value={imageUrl}
+          onChange={(e) => setImageUrl(e.target.value)}
+        />
+      ) : (
+        <input
+          className="auth-input"
+          type="file"
+          onChange={(e) => setImageFile(e.target.files[0])}
+        />
+      )}
+
+      <button className="auth-button" onClick={update}>
+        Save Changes
+      </button>
     </div>
   );
 }

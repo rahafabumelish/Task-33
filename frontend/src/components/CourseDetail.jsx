@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../api/api";
+import { toast } from "react-toastify";
 
 function CourseDetail() {
   const { id } = useParams();
+
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const [loadingEnroll, setLoadingEnroll] = useState(false);
+  const [isEnrolled, setIsEnrolled] = useState(false);
+
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+
+  // ================= FETCH COURSE
   useEffect(() => {
     const fetch = async () => {
       try {
@@ -22,21 +29,92 @@ function CourseDetail() {
     fetch();
   }, [id]);
 
+  // ================= CHECK ENROLLMENT
+  useEffect(() => {
+    const checkEnrollment = async () => {
+      try {
+        const res = await api.get("/enrollments/my");
+
+        const enrolled = res.data.some(
+          (e) => e.course._id === id
+        );
+
+        setIsEnrolled(enrolled);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    checkEnrollment();
+  }, [id]);
+
+  // ================= FREE ENROLL
+  const enrollFree = async () => {
+    try {
+      setLoadingEnroll(true);
+
+      const res = await api.post("/enrollments", {
+        courseId: id,
+      });
+
+      toast.success(res.data.message || "Enrolled successfully 🎉");
+      setIsEnrolled(true); // 🔥 تحديث فوري
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to enroll");
+    } finally {
+      setLoadingEnroll(false);
+    }
+  };
+
+  // ================= PAID COURSE
+  const payCourse = async () => {
+    try {
+      setLoadingEnroll(true);
+
+      const res = await api.post("/payments/checkout", {
+        courseId: id,
+      });
+
+      window.location.href = res.data.url;
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Payment failed");
+    } finally {
+      setLoadingEnroll(false);
+    }
+  };
+
+  const handleEnroll = () => {
+    if (!course || loadingEnroll) return;
+
+    if (Number(course.price) === 0) {
+      enrollFree();
+    } else {
+      payCourse();
+    }
+  };
+
+  // ================= IMAGE
+  const getImage = () => {
+    if (!course?.image) return "/default-course.jpg";
+    if (course.image.startsWith("http")) return course.image;
+    return `${import.meta.env.VITE_API_URL}${course.image}`;
+  };
+
   if (loading) return <h2 className="loading">Loading...</h2>;
   if (!course) return <h2>Course not found</h2>;
 
   return (
     <div className="course-detail-page">
+
       {/* LEFT */}
       <div className="course-detail-left">
         <img
-          src={
-            course.image?.startsWith("http")
-              ? course.image
-              : `${import.meta.env.VITE_API_URL}${course.image}`
-          }
-          alt={course.title}
+          src={getImage()}
+          alt={course?.title || "course"}
           className="course-detail-img"
+          onError={(e) => {
+            e.target.src = "/default-course.jpg";
+          }}
         />
 
         <div className="course-detail-content">
@@ -55,10 +133,27 @@ function CourseDetail() {
           <p>✔ Access on mobile & desktop</p>
 
           {user?.role === "student" && (
-            <button className="enroll-btn">Enroll Now</button>
+            !isEnrolled ? (
+              <button
+                className="enroll-btn"
+                onClick={handleEnroll}
+                disabled={loadingEnroll}
+              >
+                {loadingEnroll
+                  ? "Processing..."
+                  : course.price === 0
+                    ? "Enroll Now"
+                    : "Pay & Enroll"}
+              </button>
+            ) : (
+              <button className="enroll-btn enrolled" disabled>
+                Already Enrolled
+              </button>
+            )
           )}
         </div>
       </div>
+
     </div>
   );
 }

@@ -22,7 +22,6 @@ function Navbar() {
 
   return (
     <div className="navbar">
-
       {/* LEFT */}
       <div className="nav-left">
         <div className="logo">CourseHub</div>
@@ -33,21 +32,15 @@ function Navbar() {
         <NavLink to="/">Home</NavLink>
 
         {user?.role === "student" && (
-          <NavLink to="/">Courses</NavLink>
+          <NavLink to="/my-courses">My Courses</NavLink>
         )}
 
         {user?.role === "teacher" && (
-          <>
-            <NavLink to="/">Courses</NavLink>
-            <NavLink to="/create-course">Create</NavLink>
-          </>
+          <NavLink to="/create-course">Create</NavLink>
         )}
 
-        {user?.role === "admin" && (
-          <Link to="/admin">Dashboard</Link>
-        )}
+        {user?.role === "admin" && <NavLink to="/admin">Dashboard</NavLink>}
       </div>
-
       {/* RIGHT */}
       <div className="nav-right">
         {!user ? (
@@ -55,7 +48,10 @@ function Navbar() {
             <button className="nav-btn" onClick={() => navigate("/login")}>
               Login
             </button>
-            <button className="nav-btn primary" onClick={() => navigate("/register")}>
+            <button
+              className="nav-btn primary"
+              onClick={() => navigate("/register")}
+            >
               Register
             </button>
           </>
@@ -78,7 +74,6 @@ function Navbar() {
           onChange={(e) => setSearch(e.target.value)}
         />
       </form>
-
     </div>
   );
 }

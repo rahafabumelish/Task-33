@@ -13,31 +13,37 @@ function CreateCourse() {
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
 
-  const navigate = useNavigate();
+  const create = async () => {
+    try {
+      if (!form.title || !form.description) return;
 
-const create = async () => {
-  try {
-    const data = new FormData();
+      const data = new FormData();
 
-    data.append("title", form.title);
-    data.append("description", form.description);
-    data.append("price", form.price);
+      data.append("title", form.title);
+      data.append("description", form.description);
+      data.append("price", form.price);
 
-    if (imageType === "upload" && imageFile) {
-      data.append("image", imageFile);
+      if (imageType === "upload" && imageFile) {
+        data.append("image", imageFile);
+      }
+
+      if (imageType === "url" && imageUrl) {
+        data.append("image", imageUrl);
+      }
+
+      await api.post("/courses", data);
+
+      navigate("/admin");
+    } catch (err) {
+      console.log(err.response?.data || err.message);
     }
+  };
 
-    if (imageType === "url") {
-      data.append("image", imageUrl);
-    }
-
-    await api.post("/courses", data);
-
-    navigate("/admin");
-  } catch (err) {
-    console.log(err.response?.data || err.message);
-  }
-};
+  const handleTypeChange = (type) => {
+    setImageType(type);
+    setImageFile(null);
+    setImageUrl("");
+  };
   return (
     <div className="section">
       <h2>Create Course</h2>
@@ -45,32 +51,38 @@ const create = async () => {
       <input
         className="auth-input"
         placeholder="Title"
-        onChange={(e) =>
-          setForm({ ...form, title: e.target.value })
-        }
+        value={form.title}
+        onChange={(e) => setForm({ ...form, title: e.target.value })}
       />
 
       <textarea
         className="auth-input"
         placeholder="Description"
-        onChange={(e) =>
-          setForm({ ...form, description: e.target.value })
-        }
+        onChange={(e) => setForm({ ...form, description: e.target.value })}
       />
 
       <input
         className="auth-input"
         type="number"
         placeholder="Price"
-        onChange={(e) =>
-          setForm({ ...form, price: e.target.value })
-        }
+        onChange={(e) => setForm({ ...form, price: e.target.value })}
       />
 
       {/* اختيار نوع الصورة */}
-      <div style={{ marginTop: "10px" }}>
-        <button onClick={() => setImageType("url")}>URL</button>
-        <button onClick={() => setImageType("upload")}>Upload</button>
+      <div className="image-toggle">
+        <button
+          className={imageType === "url" ? "active" : ""}
+          onClick={() => handleTypeChange("url")}
+        >
+          URL
+        </button>
+
+        <button
+          className={imageType === "upload" ? "active" : ""}
+          onClick={() => handleTypeChange("upload")}
+        >
+          Upload
+        </button>
       </div>
 
       {/* URL */}
@@ -85,6 +97,7 @@ const create = async () => {
       {/* Upload */}
       {imageType === "upload" && (
         <input
+          className="auth-input"
           type="file"
           onChange={(e) => setImageFile(e.target.files[0])}
         />

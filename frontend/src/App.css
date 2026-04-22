@@ -127,23 +127,24 @@ body {
   color: #777;
 }
 
-/* BUTTON */
+/* BUTTON ===================================================================================================== */
 .auth-button {
-  padding: 12px;
-  width: 70%;
-  align-self: center;
-  background: #088395;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
+  width: fit-content;   /* يخليه على قد المحتوى */
+  padding: 10px 44px;   /* حجم أصغر */
+  background: linear-gradient(135deg, #088395, #0aa5b5);
+  border-radius: 10px;
   font-weight: bold;
+  transition: 0.3s;
+  color: white;
+
+  display: block;
+  margin: 20px auto 0;  /* يوسّطه أفقياً */
 }
 
 .auth-button:hover {
-  background: #066b78;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(8,131,149,0.25);
 }
-
 /* ERROR */
 .auth-error {
   color: red;
@@ -844,43 +845,59 @@ body {
   cursor: pointer;
 }
 
-.edit-container {
-  max-width: 700px;
-  margin: 40px auto;
-  background: white;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-}
 
-.edit-title {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #088395;
-}
 
 /* TABS */
-.tabs {
-  display: flex;
-  gap: 10px;
-  margin: 10px 0;
-}
-
 .tabs button {
   flex: 1;
-  padding: 10px;
-  border: none;
-  background: #eee;
+  padding: 7px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #f5f7fa;
+  color: #555;
+  font-weight: 600;
   cursor: pointer;
-  border-radius: 8px;
-  transition: 0.2s;
+  transition: 0.25s;
+}
+
+.tabs button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
 .tabs button.active-tab {
-  background: #088395;
+  background: linear-gradient(135deg, #088395, #0aa5b5);
   color: white;
+  border: none;
 }
 
+/* ================= IMAGE TYPE TOGGLE (URL / UPLOAD) ================= */
+.image-toggle {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  justify-content: flex-start;
+}
+
+.image-toggle button {
+  flex: unset;        /* ❌ يمنع التمدد */
+  padding: 6px 14px;  /* حجم صغير */
+  font-size: 12px;
+  border-radius: 8px;
+  width: auto;        /* مهم */
+}
+
+.image-toggle button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+/* active state */
+.image-toggle button.active {
+  background: linear-gradient(135deg, #088395, #0aa5b5);
+  color: white;
+  border: none;
+} 
 /* PREVIEW */
 .preview {
   margin-top: 15px;
@@ -888,7 +905,7 @@ body {
 }
 
 .preview img {
-  width: 100%;
+  width: 100px;
   max-height: 250px;
   object-fit: cover;
   border-radius: 12px;
@@ -896,6 +913,64 @@ body {
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 } 
 
+.my-courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  padding-top: 20px;
+}
+
+.my-course-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.my-course-card:hover {
+  transform: translateY(-6px);
+}
+
+.my-course-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.my-course-info {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.my-course-info h3 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.my-course-info p {
+  font-size: 13px;
+  color: #666;
+}
+
+.continue-btn {
+  margin-top: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #088395, #0aa5b5);
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.continue-btn:hover {
+  transform: translateY(-2px);
+}
 /* FOOTER */
 .footer {
   text-align: center;

@@ -41,7 +41,7 @@ function AdminDashboard() {
   };
   return (
     <div className="page">
-      <Navbar />
+      
 
       <div className="admin-page">
         {/* HEADER */}
@@ -139,7 +139,7 @@ function AdminDashboard() {
         </div>
       </div>
 
-      <Footer />
+     
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import Navbar from "./Navbar";
+
 import Footer from "./Footer";
 import CourseCard from "./CourseCard";
 import api from "../api/api";
@@ -27,7 +27,7 @@ function Home() {
   return (
     <div className="page">
 
-      <Navbar />
+      
 
       <div className="page-content">
 
@@ -58,7 +58,7 @@ function Home() {
 
       </div>
 
-      <Footer />
+     
     </div>
   );
 }

@@ -19,6 +19,7 @@ app.use("/users", require("./routes/userRoutes"));
 app.use("/courses", require("./routes/courseRoutes"));
 app.use("/enrollments", require("./routes/enrollmentRoutes"));
 app.use("/payments", require("./routes/paymentRoutes"));
+app.use("/uploads", express.static("uploads"));
 
 // ================= 404
 app.use((req, res) => {

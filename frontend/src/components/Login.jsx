@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../api/api";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "../App.css";
@@ -43,22 +43,30 @@ function Login() {
     if (!validate()) return;
 
     try {
-      const res = await axios.post("http://localhost:5000/users/login", form);
+      const res = await api.post("/users/login", form);
 
+      // 🔐 token + user
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
 
       toast.success("Login successful");
 
+      // 🎯 redirect حسب role
+      const role = res.data.user.role;
+
       setTimeout(() => {
-        navigate("/");
+        if (role === "admin") navigate("/admin");
+        else navigate("/");
       }, 800);
+
     } catch (err) {
-      toast.error("Invalid email or password");
+      toast.error(err.response?.data?.message || "Login failed");
     }
   };
 
   return (
     <div className="auth-container">
+
       {/* LEFT */}
       <div className="auth-left">
         <h1>Welcome Back 👋</h1>
@@ -76,6 +84,7 @@ function Login() {
       {/* RIGHT */}
       <div className="auth-right">
         <form onSubmit={handleSubmit} className="auth-form">
+
           <h2 className="auth-title">Login</h2>
 
           <input
@@ -100,8 +109,10 @@ function Login() {
           <p className="auth-switch">
             Don’t have an account? <Link to="/register">Register</Link>
           </p>
+
         </form>
       </div>
+
     </div>
   );
 }

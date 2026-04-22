@@ -11,30 +11,44 @@ function Navbar() {
     localStorage.clear();
     navigate("/login");
   };
-const handleSearch = (e) => {
-  e.preventDefault();
-  navigate(`/?search=${search}`);
-};
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (!search.trim()) return;
+
+    navigate(`/?search=${search}`);
+    setSearch(""); // تنظيف input بعد البحث
+  };
 
   return (
     <div className="navbar">
 
-      {/* LEFT - LOGO */}
+      {/* LEFT */}
       <div className="nav-left">
         <div className="logo">CourseHub</div>
       </div>
 
-      {/* CENTER - LINKS */}
+      {/* CENTER LINKS حسب الدور */}
       <div className="nav-center">
         <NavLink to="/">Home</NavLink>
-        <NavLink to="/courses">Courses</NavLink>
+
+        {user?.role === "student" && (
+          <NavLink to="/">Courses</NavLink>
+        )}
+
+        {user?.role === "teacher" && (
+          <>
+            <NavLink to="/">Courses</NavLink>
+            <NavLink to="/create-course">Create</NavLink>
+          </>
+        )}
 
         {user?.role === "admin" && (
           <Link to="/admin">Dashboard</Link>
         )}
       </div>
 
-      {/* RIGHT - AUTH */}
+      {/* RIGHT */}
       <div className="nav-right">
         {!user ? (
           <>
@@ -55,7 +69,7 @@ const handleSearch = (e) => {
         )}
       </div>
 
-      {/* 🔍 SEARCH - UNDER EVERYTHING */}
+      {/* SEARCH */}
       <form className="nav-search" onSubmit={handleSearch}>
         <input
           type="text"

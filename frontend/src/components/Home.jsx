@@ -9,8 +9,8 @@ function Home() {
   const [courses, setCourses] = useState([]);
   const location = useLocation();
 
-const search =
-  new URLSearchParams(location.search).get("search") || "";
+  const search =
+    new URLSearchParams(location.search).get("search")?.toLowerCase() || "";
 
   useEffect(() => {
     api.get("/courses").then((res) => {
@@ -18,10 +18,11 @@ const search =
     });
   }, []);
 
-  // 🔥 فلترة حسب الاسم
-  const filteredCourses = courses.filter((c) =>
-    c.title.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredCourses = search
+    ? courses.filter((c) =>
+        c.title.toLowerCase().includes(search)
+      )
+    : courses;
 
   return (
     <div className="page">

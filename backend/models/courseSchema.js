@@ -17,6 +17,12 @@ const courseSchema = new mongoose.Schema(
       default: 0,
     },
 
+    // ✅ NEW FIELD
+    image: {
+      type: String,
+      default: "https://via.placeholder.com/300x180",
+    },
+
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

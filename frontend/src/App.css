@@ -218,6 +218,11 @@ body {
   background: #ffffff;
   border-bottom: 1px solid #eaeaea;
   font-family: Arial, Helvetica, sans-serif;
+
+  /* 🔥 FIX NAVBAR OVERLAY */
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 /* ================= LOGO ================= */
@@ -357,6 +362,7 @@ body {
   border-color: #088395;
   box-shadow: 0 0 0 3px rgba(8,131,149,0.1);
 }
+
 /* CART */
 .cart-btn {
   font-size: 18px;
@@ -431,6 +437,7 @@ body {
   flex-direction: column;
   gap: 25px;
 }
+
 .courses {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 320px));
@@ -438,41 +445,456 @@ body {
   gap: 24px;
 }
 
+/* ================= COURSE CARD (PRO VERSION) ================= */
+
 .course-card {
-  background: white;
-  border-radius: 12px;
-  padding: 18px;
-  border: 1px solid #eee;
+  width: 100%;
+  max-width: 300px;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  transition: all 0.35s ease;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  transition: 0.2s;
+  position: relative;
 }
 
 .course-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+  transform: translateY(-10px);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.15);
 }
 
-.course-card h3 {
-  margin: 0;
+/* IMAGE AREA */
+.course-img-wrapper {
+  position: relative;
+  overflow: hidden;
+  height: 180px;
 }
 
-.course-card p {
+.course-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.course-card:hover .course-img {
+  transform: scale(1.12);
+}
+
+/* DARK OVERLAY ON HOVER */
+.course-img-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.45), transparent);
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.course-card:hover .course-img-wrapper::after {
+  opacity: 1;
+}
+
+/* PRICE BADGE */
+.course-price {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 2;
+}
+
+/* CONTENT */
+.course-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* TITLE */
+.course-content h3 {
+  font-size: 16px;
   margin: 0;
+  color: #1f2937;
+  font-weight: 700;
+}
+
+/* DESCRIPTION */
+.course-content p {
   font-size: 13px;
-  color: #666;
+  color: #6b7280;
+  line-height: 1.4;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.course-card button {
-  margin-top: 8px;
-  padding: 8px 12px;
-  background: #088395;
+/* BUTTON */
+.course-content button {
+  margin-top: auto;
+  padding: 10px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #088395, #0aa5b5);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.course-content button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #066b78, #088395);
+  box-shadow: 0 8px 18px rgba(8,131,149,0.3);
+}
+
+/* ================= WISHLIST ICON ================= */
+.wishlist {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255,255,255,0.9);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+  z-index: 3;
+}
+
+.wishlist:hover {
+  transform: scale(1.1);
+}
+
+.wishlist.active {
+  background: #ff4d6d;
+  color: white;
+}
+
+/* ================= DURATION BADGE ================= */
+.course-duration {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  z-index: 2;
+}
+
+/* ================= COURSE DETAIL PAGE ================= */
+
+.course-detail-page {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  padding: 50px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* LEFT SIDE */
+.course-detail-left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* IMAGE */
+.course-detail-img {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* CONTENT */
+.course-detail-content {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+}
+
+.course-detail-content h1 {
+  margin-bottom: 10px;
+  color: #088395;
+}
+
+.course-detail-content p {
+  color: #555;
+  line-height: 1.6;
+}
+
+/* RIGHT SIDE */
+.course-detail-right {
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+}
+
+/* CARD */
+.course-card-box {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.course-card-box h2 {
+  color: #10b981;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+/* BUTTON */
+.enroll-btn {
+  margin-top: 15px;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #088395, #0aa5b5);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.enroll-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(8,131,149,0.3);
+}
+
+/* LOADING */
+.loading {
+  text-align: center;
+  margin-top: 100px;
+  color: #088395;
+}
+
+/* ================= ADMIN PAGE ================= */
+
+.admin-page {
+  padding: 40px;
+  min-height: 100vh;
+  background: #f6f7fb;
+
+  /* 🔥 spacing بين العناصر */
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+}
+
+/* HEADER */
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.admin-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #222;
+}
+
+/* CREATE BUTTON */
+.admin-create-btn {
+  background: #4f46e5;
   color: white;
   border: none;
-  border-radius: 6px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.admin-create-btn:hover {
+  background: #3730a3;
+}
+
+/* STATS */
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+/* stat card */
+.stat-card {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+  transition: 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+}
+
+.stat-title {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 8px;
+}
+
+.stat-number {
+  font-size: 28px;
+  font-weight: bold;
+  color: #088395;
+}
+
+/* ================= CHART FIX ================= */
+.admin-chart {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
+}
+
+/* تصغير الشارت */
+.admin-chart svg {
+  max-width: 400px !important;
+  height: auto !important;
+}
+
+/* COURSES GRID */
+.admin-courses {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* COURSE CARD */
+.admin-course-card {
+  background: white;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+  transition: 0.2s;
+}
+
+.admin-course-card:hover {
+  transform: translateY(-5px);
+}
+
+.admin-course-title {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.admin-course-desc {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+/* ACTIONS */
+.admin-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.admin-edit-btn {
+  flex: 1;
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
   cursor: pointer;
 }
+
+.admin-delete-btn {
+  flex: 1;
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.edit-container {
+  max-width: 700px;
+  margin: 40px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.edit-title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #088395;
+}
+
+/* TABS */
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.tabs button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.tabs button.active-tab {
+  background: #088395;
+  color: white;
+}
+
+/* PREVIEW */
+.preview {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.preview img {
+  width: 100%;
+  max-height: 250px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-top: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+} 
 
 /* FOOTER */
 .footer {

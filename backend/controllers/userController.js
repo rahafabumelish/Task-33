@@ -14,7 +14,6 @@ const register = async (req, res) => {
 
     // 🔐 allow only student/teacher
     let safeRole = "student";
-
     if (role === "teacher") {
       safeRole = "teacher";
     }
@@ -47,19 +46,16 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // ================================================ find user
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    // ==================================================== compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    // ========================================================= create token
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
@@ -73,29 +69,43 @@ const login = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role
-      }
+        role: user.role,
+      },
     });
-
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
+// ========================================= ME
 const me = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
 
     res.json({
       message: "User profile",
-      user
+      user,
     });
-
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
+// ========================================= GET ALL USERS (ADMIN)
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().select("-password");
+
+    res.json({
+      users,
+      count: users.length,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// ========================================= FORGOT PASSWORD
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -105,7 +115,6 @@ const forgotPassword = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // ================================== create JWT reset token
     const resetToken = jwt.sign(
       { id: user._id },
       process.env.JWT_SECRET,
@@ -121,17 +130,16 @@ const forgotPassword = async (req, res) => {
       message: "Reset token generated",
       resetToken,
     });
-
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
+// ========================================= RESET PASSWORD
 const resetPassword = async (req, res) => {
   try {
     const { token, newPassword } = req.body;
 
-    // ======================================= verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const user = await User.findOne({
@@ -151,17 +159,17 @@ const resetPassword = async (req, res) => {
     await user.save();
 
     res.json({ message: "Password reset successful" });
-
   } catch (err) {
     res.status(400).json({ message: "Invalid or expired token" });
   }
 };
 
-
+// ========================================= EXPORTS
 module.exports = {
   register,
   login,
   me,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  getAllUsers,
 };

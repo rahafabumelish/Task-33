@@ -1,7 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import api from "../api/api";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import "../App.css";
@@ -52,13 +51,14 @@ function Register() {
     const { confirmPassword, ...data } = form;
 
     try {
-      await axios.post("http://localhost:5000/users/register", data);
+      await api.post("/users/register", data);
 
       toast.success("Registered successfully");
 
       setTimeout(() => {
         navigate("/login");
       }, 800);
+
     } catch (err) {
       const msg = err.response?.data?.message;
 
@@ -77,6 +77,7 @@ function Register() {
 
   return (
     <div className="auth-container">
+
       {/* LEFT */}
       <div className="auth-left">
         <h1>Learn Anytime</h1>
@@ -86,6 +87,7 @@ function Register() {
       {/* RIGHT */}
       <div className="auth-right">
         <form onSubmit={handleSubmit} className="auth-form">
+
           <h2 className="auth-title">Create Account</h2>
 
           <input
@@ -142,7 +144,7 @@ function Register() {
             <p className="auth-error">{errors.confirmPassword}</p>
           )}
 
-          {/* ⭐ SELECT MODERN */}
+          {/* ROLE */}
           <div className="select-wrapper">
             <select
               className="auth-select"
@@ -155,11 +157,14 @@ function Register() {
           </div>
 
           <button className="auth-button">Register</button>
+
           <p className="auth-switch">
             Already have an account? <Link to="/login">Login</Link>
           </p>
+
         </form>
       </div>
+
     </div>
   );
 }

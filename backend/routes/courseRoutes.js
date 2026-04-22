@@ -9,16 +9,28 @@ const {
   deleteCourse,
   getCourseStudents,
 } = require("../controllers/courseController");
+const upload = require("../middleware/upload");
 
 const auth = require("../middleware/auth");
 const authorizeRole = require("../middleware/authorizeRole");
 
 // ===================================== Create (Teacher + Admin)
-router.post("/", auth, authorizeRole("teacher", "admin"), createCourse);
+router.post(
+  "/",
+  auth,
+  authorizeRole("teacher", "admin"),
+  upload.single("image"),
+  createCourse
+);
 
 // ===================================== Update (Teacher + Admin)
-router.put("/:id", auth, authorizeRole("teacher", "admin"), updateCourse);
-
+router.put(
+  "/:id",
+  auth,
+  authorizeRole("teacher", "admin"),
+  upload.single("image"),
+  updateCourse
+);
 // ===================================== Delete (Admin only)
 router.delete("/:id", auth, authorizeRole("admin"), deleteCourse);
 

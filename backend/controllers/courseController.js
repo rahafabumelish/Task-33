@@ -14,10 +14,15 @@ const createCourse = async (req, res) => {
       return res.status(403).json({ message: "Not allowed" });
     }
 
+    const image = req.file
+      ? `/uploads/${req.file.filename}`
+      : "";
+
     const course = await Course.create({
       title,
       description,
       price,
+      image,
       createdBy: req.user.id,
     });
 
@@ -49,7 +54,7 @@ const getCourseById = async (req, res) => {
   try {
     const course = await Course.findById(req.params.id).populate(
       "createdBy",
-      "name email"
+      "name email",
     );
 
     if (!course) {
@@ -65,7 +70,7 @@ const getCourseById = async (req, res) => {
 // ============================== Update Course
 const updateCourse = async (req, res) => {
   try {
-    const { title, description, price } = req.body;
+    const { title, description, price, image } = req.body;
 
     const course = await Course.findById(req.params.id);
 
@@ -80,9 +85,19 @@ const updateCourse = async (req, res) => {
       return res.status(403).json({ message: "Not allowed (not owner)" });
     }
 
+  
+    let updatedImage = course.image;
+
+    if (req.file) {
+      updatedImage = `/uploads/${req.file.filename}`;
+    } else if (image) {
+      updatedImage = image;
+    }
+
     course.title = title || course.title;
     course.description = description || course.description;
     course.price = price || course.price;
+    course.image = updatedImage;
 
     await course.save();
 

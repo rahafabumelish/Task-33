@@ -6,7 +6,8 @@ const {
   login,
   me,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  getAllUsers
 } = require("../controllers/userController");
 
 const auth = require("../middleware/auth");
@@ -20,9 +21,12 @@ router.post("/login", login);
 router.get("/me", auth, me);
 
 // ================= Admin only
-router.get("/all-users", auth, authorizeRoles("admin"), (req, res) => {
-  res.json({ message: "Only admin can see this" });
-});
+router.get(
+  "/",
+  auth,
+  authorizeRoles("admin"),
+  getAllUsers
+);
 // ========================== forgot password
 router.post("/forgot-password", forgotPassword);
 

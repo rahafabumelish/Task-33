@@ -4,14 +4,14 @@ const cors = require("cors");
 
 require("dotenv").config();
 require("./models/db");
-//new
+
+// ================= CORS
 app.use(cors());
 
-// ================= WEBHOOK ROUTE
-const webhookRoutes = require("./routes/webhookRoutes");
-app.use("/payments/webhook", webhookRoutes);
+// ================= WEBHOOK (IMPORTANT - BEFORE JSON)
+app.use("/payments/webhook", require("./routes/webhookRoutes"));
 
-// ================= GLOBAL JSON
+// ================= JSON FOR NORMAL ROUTES
 app.use(express.json());
 
 // ================= ROUTES
@@ -20,13 +20,16 @@ app.use("/courses", require("./routes/courseRoutes"));
 app.use("/enrollments", require("./routes/enrollmentRoutes"));
 app.use("/payments", require("./routes/paymentRoutes"));
 app.use("/uploads", express.static("uploads"));
+app.use("/favorites", require("./routes/favoriteRoutes"));
+
+app.use("/cart",  require("./routes/cartRoutes"));
 
 // ================= 404
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT ;
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

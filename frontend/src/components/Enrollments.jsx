@@ -33,7 +33,7 @@ function Enrollments() {
   if (loading) return <h2 className="loading">Loading...</h2>;
 
   return (
-  <div className="section">
+  <div className="my-courses-page">
     <h2>My Courses</h2>
 
     {courses.length === 0 ? (
@@ -41,38 +41,40 @@ function Enrollments() {
     ) : (
       <div className="my-courses-grid">
 
-        {courses.map((enrollment) => (
-          <div
-            key={enrollment._id}
-            className="my-course-card"
-            onClick={() =>
-              navigate(`/course/${enrollment.course._id}`)
-            }
+        {courses
+  .filter((enrollment) => enrollment?.course)
+  .map((enrollment) => {
+    const course = enrollment.course;
+
+    return (
+      <div
+        key={enrollment._id}
+        className="my-course-card"
+        onClick={() => navigate(`/course/${course._id}`)}
+      >
+        <img
+          src={getImage(course.image)}
+          alt={course.title}
+        />
+
+        <div className="my-course-info">
+          <h3>{course.title}</h3>
+
+          <p>{course.description?.slice(0, 80)}...</p>
+
+          <button
+            className="continue-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/course/${course._id}`);
+            }}
           >
-            <img
-              src={getImage(enrollment.course.image)}
-              alt={enrollment.course.title}
-            />
-
-            <div className="my-course-info">
-              <h3>{enrollment.course.title}</h3>
-
-              <p>
-                {enrollment.course.description?.slice(0, 80)}...
-              </p>
-
-              <button
-                className="continue-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate(`/course/${enrollment.course._id}`);
-                }}
-              >
-                Continue Learning
-              </button>
-            </div>
-          </div>
-        ))}
+            Continue Learning
+          </button>
+        </div>
+      </div>
+    );
+  })}
 
       </div>
     )}

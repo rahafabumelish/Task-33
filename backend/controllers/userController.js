@@ -1,7 +1,8 @@
 const User = require("../models/userSchema");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // ========================================== Register
 const register = async (req, res) => {
   try {
@@ -163,6 +164,7 @@ const resetPassword = async (req, res) => {
     res.status(400).json({ message: "Invalid or expired token" });
   }
 };
+
 
 // ========================================= EXPORTS
 module.exports = {

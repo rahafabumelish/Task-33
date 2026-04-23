@@ -67,11 +67,15 @@ const enrollCourse = async (req, res) => {
 //===================================== My Courses
 const getMyCourses = async (req, res) => {
   try {
-    const enrollments = await Enrollment.find({ user: req.user.id }).populate(
-      "course",
+    const enrollments = await Enrollment.find({ user: req.user.id })
+      .populate("course");
+
+    // 🔥 فلترة أي كورس محذوف أو null
+    const safeEnrollments = enrollments.filter(
+      (e) => e.course !== null
     );
 
-    res.json(enrollments);
+    res.json(safeEnrollments);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams ,useNavigate  } from "react-router-dom";
 import api from "../api/api";
 import { toast } from "react-toastify";
 
@@ -10,7 +10,7 @@ function CourseDetail() {
   const [loading, setLoading] = useState(true);
   const [loadingEnroll, setLoadingEnroll] = useState(false);
   const [isEnrolled, setIsEnrolled] = useState(false);
-
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user") || "null");
 
   // ================= FETCH COURSE
@@ -58,7 +58,7 @@ function CourseDetail() {
       });
 
       toast.success(res.data.message || "Enrolled successfully 🎉");
-      setIsEnrolled(true); // 🔥 تحديث فوري
+      setIsEnrolled(true); 
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to enroll");
     } finally {
@@ -83,15 +83,25 @@ function CourseDetail() {
     }
   };
 
-  const handleEnroll = () => {
-    if (!course || loadingEnroll) return;
+const handleEnroll = () => {
+  if (!course || loadingEnroll) return;
 
-    if (Number(course.price) === 0) {
-      enrollFree();
-    } else {
-      payCourse();
-    }
-  };
+  // 👤 guest → login
+  if (!user) {
+    toast.info("Please login first");
+    navigate("/login");
+    return;
+  }
+
+  // 👨‍🏫 admin / teacher safety
+  if (user.role !== "student") return;
+
+  if (Number(course.price) === 0) {
+    enrollFree();
+  } else {
+    payCourse();
+  }
+};
 
   // ================= IMAGE
   const getImage = () => {
@@ -132,8 +142,7 @@ function CourseDetail() {
           <p>✔ Certificate included</p>
           <p>✔ Access on mobile & desktop</p>
 
-          {user?.role === "student" && (
-            !isEnrolled ? (
+{(!user || user.role === "student") && (            !isEnrolled ? (
               <button
                 className="enroll-btn"
                 onClick={handleEnroll}

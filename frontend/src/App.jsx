@@ -7,12 +7,13 @@ import AdminDashboard from "./components/AdminDashboard";
 import CreateCourse from "./components/CreateCourse";
 import EditCourse from "./components/EditCourse";
 import PaymentSuccess from "./components/PaymentSuccess";
+import Cart from "./components/Cart";
 import Enrollments from "./components/Enrollments";
 import Navbar from "./components/Navbar";
-
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "./components/Footer";
+import Favorites from "./components/Favorites";
 
 function App() {
   const location = useLocation();
@@ -33,7 +34,9 @@ function App() {
           <Route path="/create-course" element={<CreateCourse />} />
           <Route path="/edit/:id" element={<EditCourse />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="/my-courses" element={<Enrollments />} />
+          <Route path="/favorites" element={<Favorites />} />
         </Routes>
       </main>
 

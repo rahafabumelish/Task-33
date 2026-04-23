@@ -11,6 +11,9 @@ function AdminDashboard() {
   const [courses, setCourses] = useState([]);
   const [users, setUsers] = useState([]);
 
+  const [deleteId, setDeleteId] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+
   const navigate = useNavigate();
 
   // ===================== GET DATA
@@ -30,20 +33,31 @@ function AdminDashboard() {
 
   const students = users.filter((u) => u.role === "student").length;
   const teachers = users.filter((u) => u.role === "teacher").length;
-  const deleteCourse = async (id) => {
-    const confirmDelete = window.confirm("Delete this course?");
-    if (!confirmDelete) return;
 
-    await api.delete(`/courses/${id}`);
-
-    // تحديث الصفحة بدون refresh
-    setCourses(courses.filter((c) => c._id !== id));
+  // ===================== DELETE HANDLERS
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setOpenModal(true);
   };
+
+  const confirmDelete = async () => {
+  try {
+    console.log("Deleting:", deleteId);
+
+    await api.delete(`/courses/${deleteId}`);
+
+    setCourses((prev) => prev.filter((c) => c._id !== deleteId));
+
+    setOpenModal(false);
+    setDeleteId(null);
+  } catch (err) {
+    console.log(err.response?.data || err.message);
+  }
+};
   return (
     <div className="page">
-      
-
       <div className="admin-page">
+
         {/* HEADER */}
         <div className="admin-header">
           <h2 className="admin-title">Admin Dashboard 👑</h2>
@@ -79,7 +93,7 @@ function AdminDashboard() {
           </div>
         </div>
 
-        {/* CHART (SMALL & CENTERED) */}
+        {/* CHART */}
         <div
           className="admin-chart"
           style={{ maxWidth: "600px", margin: "0 auto" }}
@@ -129,7 +143,7 @@ function AdminDashboard() {
 
                 <button
                   className="admin-delete-btn"
-                  onClick={() => deleteCourse(c._id)}
+                  onClick={() => handleDeleteClick(c._id)}
                 >
                   Delete
                 </button>
@@ -137,9 +151,30 @@ function AdminDashboard() {
             </div>
           ))}
         </div>
-      </div>
 
-     
+        {/* MODAL (OUTSIDE MAP) */}
+        {openModal && (
+          <div className="modal-overlay">
+            <div className="modal-box">
+              <h3>Are you sure you want to delete this course?</h3>
+
+              <div className="modal-actions">
+                <button
+                  className="btn-cancel"
+                  onClick={() => setOpenModal(false)}
+                >
+                  Cancel
+                </button>
+
+                <button className="btn-delete" onClick={confirmDelete}>
+                  Yes, Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+      </div>
     </div>
   );
 }

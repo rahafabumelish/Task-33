@@ -119,21 +119,35 @@ const deleteCourse = async (req, res) => {
       return res.status(404).json({ message: "Course not found" });
     }
 
-    if (
-      course.createdBy.toString() !== req.user.id &&
-      req.user.role !== "admin"
-    ) {
-      return res.status(403).json({ message: "Not allowed (not owner)" });
+    
+    if (req.user.role !== "admin") {
+      if (!course.createdBy) {
+        return res.status(403).json({
+          message: "Course has no owner",
+        });
+      }
+
+      if (course.createdBy.toString() !== req.user.id) {
+        return res.status(403).json({
+          message: "Not allowed",
+        });
+      }
     }
 
     await course.deleteOne();
 
-    res.json({ message: "Course deleted" });
+    res.json({
+      message: "Course deleted",
+    });
+
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.log(err);
+
+    res.status(500).json({
+      message: err.message,
+    });
   }
 };
-
 // ============================== Get Course student (SECURED)
 const getCourseStudents = async (req, res) => {
   try {

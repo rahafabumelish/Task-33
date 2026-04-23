@@ -12,7 +12,7 @@ function CreateCourse() {
   const [imageType, setImageType] = useState("url");
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
-
+const navigate = useNavigate();
   const create = async () => {
     try {
       if (!form.title || !form.description) return;
@@ -68,7 +68,7 @@ function CreateCourse() {
         onChange={(e) => setForm({ ...form, price: e.target.value })}
       />
 
-      {/* اختيار نوع الصورة */}
+      
       <div className="image-toggle">
         <button
           className={imageType === "url" ? "active" : ""}

@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { stripeWebhook } = require("../controllers/stripeWebhookController");
 
-// ⚠️ مهم: raw body فقط للـ webhook
+// =============================== webhook
 router.post(
   "/",
   express.raw({ type: "application/json" }),

@@ -1,6 +1,7 @@
 const Cart = require("../models/cartSchema");
 
-exports.addToCart = async (req, res) => {
+// ================= Add to cart
+const addToCart = async (req, res) => {
   try {
     const { courseId } = req.body;
 
@@ -25,7 +26,9 @@ exports.addToCart = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-exports.getMyCart = async (req, res) => {
+
+// ================= Get my cart
+const getMyCart = async (req, res) => {
   try {
     const cart = await Cart.find({
       user: req.user.id,
@@ -36,7 +39,9 @@ exports.getMyCart = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-exports.removeCart = async (req, res) => {
+
+// ================= Remove from cart
+const removeCart = async (req, res) => {
   try {
     await Cart.findByIdAndDelete(req.params.id);
 
@@ -44,4 +49,10 @@ exports.removeCart = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+};
+
+module.exports = {
+  addToCart,
+  getMyCart,
+  removeCart,
 };

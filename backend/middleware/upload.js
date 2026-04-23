@@ -1,7 +1,7 @@
 const multer = require("multer");
 const path = require("path");
 
-// إعداد التخزين
+// ========================= Configure storage settings for uploaded files
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/");
@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
   },
 });
 
-// فلترة الملفات (صور فقط)
+// ========================== File filter to allow only images
 const fileFilter = (req, file, cb) => {
   const allowedTypes = /jpeg|jpg|png|webp/;
   const ext = path.extname(file.originalname).toLowerCase();

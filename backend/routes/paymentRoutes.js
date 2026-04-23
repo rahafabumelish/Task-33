@@ -10,16 +10,16 @@ const {
   getMyPayments,
 } = require("../controllers/paymentController");
 
-// 💳 checkout
+// ================== checkout
 router.post("/checkout", auth, checkoutCourse);
 
-// ✅ success (Stripe redirect only)
+// ================== success (Stripe redirect only)
 router.get("/success", paymentSuccess);
 
-// ❌ cancel
+// ================== cancel
 router.post("/cancel", paymentCancel);
 
-// 📊 my payments
+// ================== my payments
 router.get("/my", auth, getMyPayments);
 
 module.exports = router;

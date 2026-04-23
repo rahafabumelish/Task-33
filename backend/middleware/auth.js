@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 
+// Middleware to protect routes and verify JWT token
 const auth = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -8,7 +9,7 @@ const auth = (req, res, next) => {
   }
 
   let token;
-
+// Check if token follows the format: Bearer <token>
   if (authHeader.startsWith("Bearer ")) {
     token = authHeader.split(" ")[1];
   }
@@ -18,7 +19,7 @@ const auth = (req, res, next) => {
       message: "Token must be in format: Bearer <token>",
     });
   }
-
+// Verify token using JWT secret key
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;

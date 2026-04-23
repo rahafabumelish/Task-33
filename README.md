@@ -7,13 +7,35 @@ A full-stack web application for managing and enrolling in online courses.
 ## 🚀 Features
 
 - User authentication (Register / Login)
-- Role-based access (Student, Teacher, Admin)
-- Create & manage courses
-- Enroll in courses
-- Payment integration using Stripe
+- Guest users can browse available courses
+- Login required before enrolling in any course
+- Role-based access control:
+  - Student
+  - Teacher
+  - Admin
+- Create, edit, and delete courses
+- Search courses
+- Add courses to favorites
+- Shopping cart system
+- Course enrollment system
+- Stripe payment integration
 - View enrolled courses
+- Admin dashboard for managing users and courses
+- Teacher create courses
 
 ---
+## 📸 Screenshots
+### Home Page
+![Home](./screenshots/home.png)
+
+### Course Detail
+![Course Detail](./screenshots/course-detail.png)
+
+### Cart
+![Cart](./screenshots/cart.png)
+
+### Dashboard
+![Dashboard](./screenshots/dashboard.png)
 
 ## 🛠 Tech Stack
 
@@ -29,6 +51,17 @@ A full-stack web application for managing and enrolling in online courses.
 - JWT Authentication
 
 ---
+
+## 🌍 Deployment
+
+- Frontend: Netlify
+- Backend: Render
+- Database: MongoDB Atlas
+
+## 🌍 Live Demo
+
+Frontend: https://your-app.netlify.app  
+Backend API: https://your-api.onrender.com
 
 ## 📁 Project Structure
 proj33/

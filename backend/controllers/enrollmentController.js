@@ -70,7 +70,7 @@ const getMyCourses = async (req, res) => {
     const enrollments = await Enrollment.find({ user: req.user.id })
       .populate("course");
 
-    // 🔥 فلترة أي كورس محذوف أو null
+    //  فلترة أي كورس محذوف أو null
     const safeEnrollments = enrollments.filter(
       (e) => e.course !== null
     );

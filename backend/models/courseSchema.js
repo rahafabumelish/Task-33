@@ -17,11 +17,10 @@ const courseSchema = new mongoose.Schema(
       default: 0,
     },
 
-    // ✅ NEW FIELD
-  image: {
-  type: String,
-  default: null,
-},
+    image: {
+      type: String,
+      default: null,
+    },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -29,7 +28,7 @@ const courseSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 module.exports = mongoose.model("Course", courseSchema);

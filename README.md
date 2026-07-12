@@ -60,7 +60,7 @@ A full-stack web application for managing and enrolling in online courses.
 
 ## 🌍 Live Demo
 
-Frontend: darbni-course.netlify.app
+Frontend:https://darbni-course.netlify.app
 Backend API:https://task-33-kqih.onrender.com
 
 
